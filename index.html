@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>ZSurfers</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="flash"></div><div id="hurt"></div>
+
+<div id="loading" class="screen">
+  <div class="logo">Z<span>SURFERS</span></div>
+  <div class="bar"><div id="barfill"></div></div>
+  <div id="loadtxt">Chargement…</div>
+</div>
+
+<div id="menu" class="screen hidden">
+  <div class="logo small">Z<span>SURFERS</span></div>
+  <div class="menu-left">
+    <div class="panel">
+      <div class="lbl">Personnage</div>
+      <div class="picker">
+        <button id="prevChar" class="arrow">‹</button>
+        <div id="charName">—</div>
+        <button id="nextChar" class="arrow">›</button>
+      </div>
+      <div class="lbl">Vitesse</div>
+      <div class="seg" id="speedSeg">
+        <button data-m="slow">Lent</button>
+        <button data-m="normal">Normal</button>
+        <button data-m="fast">Rapide</button>
+      </div>
+      <button id="playBtn" class="big">JOUER</button>
+      <button id="texBtn" class="ghost">⚙ Paramètres</button>
+      <div class="help">
+        <b>Z</b> sauter · <b>S</b> glisser · <b>Q</b> gauche · <b>D</b> droite<br>
+        (flèches aussi) · <b>P</b> pause
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="hud" class="hidden">
+  <div class="hud-l"><div id="score">0 m</div><div id="coins">🪙 0</div></div>
+  <div id="chrono" data-style="neon" data-size="m" data-pos="top">
+    <div class="ch-label"><i></i>TEMPS</div>
+    <div class="ch-time"><span id="chM">00</span><b>:</b><span id="chS">00</span><em>.<span id="chC">00</span></em></div>
+  </div>
+  <div class="hud-r"><div id="modeTag"></div><button id="pauseBtn">❚❚</button></div>
+  <div id="boost" class="hidden"><span id="boostIcon">🚕</span><div class="bf"><i id="boostFill"></i></div></div>
+  <div id="countdown"></div>
+</div>
+
+<div id="pause" class="screen hidden">
+  <h2>Pause</h2>
+  <button id="resumeBtn" class="big">Reprendre</button>
+  <button id="quitBtn" class="ghost">Menu principal</button>
+</div>
+
+<div id="over" class="screen hidden">
+  <h2>Perdu !</h2>
+  <div id="overScore"></div>
+  <button id="againBtn" class="big">Rejouer</button>
+  <button id="menuBtn" class="ghost">Menu principal</button>
+</div>
+
+<div id="texModal" class="screen hidden">
+  <div class="modal">
+    <h2>Paramètres</h2>
+    <div class="tabs">
+      <button data-tab="tabTex" class="on">🎨 Textures</button>
+      <button data-tab="tabDisp">🖥 Affichage</button>
+      <button data-tab="tabChrono">⏱ Chrono</button>
+    </div>
+
+    <div id="tabTex" class="tab">
+      <p class="sub">Remplace chaque texture par une couleur unie, ou garde l’originale.</p>
+      <div id="texRows"></div>
+      <label class="row chk"><input type="checkbox" id="flipChk"> <span>Inverser le sens du personnage (s’il court à reculons)</span></label>
+      <label class="row chk"><input type="checkbox" id="decorChk" checked> <span>Afficher le décor de la map sur les côtés</span></label>
+    </div>
+
+    <div id="tabDisp" class="tab hidden">
+      <p class="sub">Change la résolution du rendu. « Étirer » remplit tout l’écran, même si le ratio est différent.</p>
+      <div class="row"><div class="n">Résolution</div><select id="resSel"></select></div>
+      <div class="row" id="resCustom"><div class="n">Personnalisée</div>
+        <input type="number" id="resW" min="160" max="7680" step="1"> <span>×</span> <input type="number" id="resH" min="90" max="4320" step="1"></div>
+      <label class="row chk"><input type="checkbox" id="stretchChk"> <span>Étirer l’image pour remplir l’écran</span></label>
+      <div class="sub" id="resInfo"></div>
+    </div>
+
+    <div id="tabChrono" class="tab hidden">
+      <p class="sub">Le chrono démarre à chaque début de partie.</p>
+      <label class="row chk"><input type="checkbox" id="chShow"> <span>Afficher le chronomètre</span></label>
+      <div class="row"><div class="n">Couleur</div><input type="color" id="chColor"></div>
+      <div class="row"><div class="n">Style</div><select id="chStyle"><option value="neon">Néon</option><option value="glass">Verre</option><option value="minimal">Minimal</option></select></div>
+      <div class="row"><div class="n">Taille</div><select id="chSize"><option value="s">Petit</option><option value="m">Moyen</option><option value="l">Grand</option></select></div>
+      <div class="row"><div class="n">Position</div><select id="chPos"><option value="top">Haut (centre)</option><option value="left">Gauche</option><option value="right">Droite</option><option value="bottom">Bas (centre)</option></select></div>
+      <div class="row"><div class="n">S’arrête</div><select id="chStop"><option value="coin">À la mort ou à la 1re pièce</option><option value="death">À la mort uniquement</option></select></div>
+    </div>
+
+    <div class="modal-btns">
+      <button id="texReset" class="ghost">Tout réinitialiser</button>
+      <button id="texClose" class="big sm">OK</button>
+    </div>
+  </div>
+</div>
+
+<div id="err" class="screen hidden"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/utils/SkeletonUtils.js"></script>
+<script src="js/models/charmasks.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

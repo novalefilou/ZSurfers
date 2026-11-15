@@ -1,0 +1,34 @@
+ZSURFERS — Mon propre runner 3D
+================================
+LANCER : double-clique sur index.html (aucun serveur nécessaire).
+IMPORTANT : une connexion Internet est requise (la bibliothèque Three.js est chargée depuis un CDN).
+Tous tes modèles 3D sont intégrés dans le dossier js/models/.
+
+COMMANDES : Z sauter · S glisser (roulade) · Q gauche · D droite (flèches aussi) · P pause · swipe sur mobile.
+
+RÈGLES
+- Barrière / portique / train de face = mort immédiate.
+- Mur invisible (bord de la voie) ou train sur le côté = cognement. Le 1er cognement lance l’inspecteur,
+  le suivant (sans aucun délai d’immunité) te fait perdre.
+- Jetpack : objet ramassable, vol de 6 s avec traînée de pièces.
+
+PARAMÈTRES (menu > ⚙ Paramètres)
+- Textures : texture d’origine ou couleur unie (personnages, pièces, trains, barrières, décor, sol, menu, ciel).
+- Affichage : résolution (4K → 640×360, personnalisée) + option « Étirer ».
+- Chrono : afficher/masquer, couleur, style (néon / verre / minimal), taille, position, condition d’arrêt.
+
+NOUVEAUTÉS
+- Les personnages ne sont plus en T-pose : course, saut, roulade, cognement, chute, vol, changement de voie,
+  et animation d’attente dans le menu (Boombot, Frank et l’inspecteur compris).
+- Décor rapproché + lampadaires et bordures jaunes le long de la voie.
+- Barrières refaites : barricade rayée rouge/blanc, bloc béton rayé, portique à barre rayée avec panneaux.
+
+VERSION TAXI + PATTERNS
+- Bonus TAXI (🚕) : ramasse-le (après ~90 m, puis en alternance avec le jetpack). Le taxi tombe du ciel, tu sautes dedans,
+  tu fonces 5 s en détruisant tout (les obstacles s’envolent avec nuages de poussière et débris), puis tu es éjecté avec un salto.
+  Le taxi est modifiable dans Paramètres > Textures (« Taxi (bonus) »).
+- Trains à rampes : on monte sur le toit des trains et on y court (pièces sur les toits, sauts d’un train à l’autre).
+- Patterns : générateur à graine avec « sac » (pas de répétition) + enchaînements procéduraux, et un VALIDATEUR qui rejette
+  tout pattern injouable et supprime les pièces inatteignables.
+- Pièces : hitbox précise (il faut réellement les toucher).
+- Plus de T-pose au départ de la partie ni à l’arrivée de l’inspecteur.
